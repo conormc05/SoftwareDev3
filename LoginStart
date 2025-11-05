@@ -39,12 +39,19 @@ public class LoginPage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String user = username.getText();
         String pass = new String(password.getPassword());
+
         if (user.isEmpty() || pass.isEmpty()) {
             message.setForeground(Color.RED);
             message.setText("Please enter both fields");
         } else {
-            message.setForeground(new Color(0, 128, 0));
-            message.setText("Login successful");
+            // Optional improvement: show confirmation popup
+            JOptionPane.showMessageDialog(this, "Login Successful!");
+
+            // Close current window
+            this.dispose();
+
+            // Open Menu window (homepage)
+            SwingUtilities.invokeLater(() -> new Menu());
         }
     }
 
