@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,53 +10,108 @@ public class LoginPage extends JFrame implements ActionListener {
     private JLabel message;
 
     public LoginPage() {
-        setTitle("TicketMaster Login");
+        setTitle("Ticket Grandmaster - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 180);
+        setSize(360, 220);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new GridLayout(4, 2, 8, 8));
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // Main container
+        JPanel root = new JPanel(new BorderLayout(10, 10));
+        root.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        panel.add(new JLabel("Username:"));
+        // Header
+        JLabel header = new JLabel("Ticket Grandmaster Login", SwingConstants.CENTER);
+        header.setFont(header.getFont().deriveFont(Font.BOLD, 18f));
+        root.add(header, BorderLayout.NORTH);
+
+        // Form
+        JPanel form = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(6, 6, 6, 6);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Username
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0;
+        form.add(new JLabel("Username:"), gbc);
         username = new JTextField();
-        panel.add(username);
+        gbc.gridx = 1; gbc.gridy = 0; gbc.weightx = 1.0;
+        form.add(username, gbc);
 
-        panel.add(new JLabel("Password:"));
+        // Password
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0;
+        form.add(new JLabel("Password:"), gbc);
         password = new JPasswordField();
-        panel.add(password);
+        gbc.gridx = 1; gbc.gridy = 1; gbc.weightx = 1.0;
+        form.add(password, gbc);
 
-        panel.add(new JLabel(""));
+        // Button row
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         login = new JButton("Login");
         login.addActionListener(this);
-        panel.add(login);
+        buttons.add(login);
 
-        message = new JLabel("", SwingConstants.CENTER);
-        panel.add(message);
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2; gbc.weightx = 1.0;
+        form.add(buttons, gbc);
 
-        add(panel);
+        root.add(form, BorderLayout.CENTER);
+
+        // Message area
+        message = new JLabel(" ", SwingConstants.CENTER);
+        message.setForeground(new Color(180, 0, 0));
+        root.add(message, BorderLayout.SOUTH);
+
+        // Press Enter to submit
+        getRootPane().setDefaultButton(login);
+
+        add(root);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
-        String user = username.getText();
+        String user = username.getText().trim();
         String pass = new String(password.getPassword());
 
         if (user.isEmpty() || pass.isEmpty()) {
-            message.setForeground(Color.RED);
-            message.setText("Please enter both fields");
-        } else {
-            // Optional improvement: show confirmation popup
-            JOptionPane.showMessageDialog(this, "Login Successful!");
-
-            // Close current window
-            this.dispose();
-
-            // Open Menu window (homepage)
-            SwingUtilities.invokeLater(() -> new Menu());
+            showError("Please enter both username and password.");
+            return;
         }
+
+        // Simple placeholder "authentication"
+        // Replace with real check (e.g., DB/file) as needed
+        boolean valid = true; // stub
+
+        if (!valid) {
+            showError("Invalid credentials. Try again.");
+            return;
+        }
+
+        // Optional confirmation
+        JOptionPane.showMessageDialog(this, "Login Successful!", "Ticket Grandmaster", JOptionPane.INFORMATION_MESSAGE);
+
+        // Open Menu, close login
+        SwingUtilities.invokeLater(Menu::new);
+        dispose();
+    }
+
+    private void showError(String text) {
+        message.setText(text);
+        // brief shake effect for fun (non-blocking)
+        Point p = getLocation();
+        new Thread(() -> {
+            try {
+                for (int i = 0; i < 8; i++) {
+                    setLocation(p.x + (i % 2 == 0 ? 6 : -6), p.y);
+                    Thread.sleep(18);
+                }
+            } catch (InterruptedException ignored) {} 
+            finally {
+                setLocation(p);
+            }
+        }).start();
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new LoginPage().setVisible(true));
     }
 }
+
