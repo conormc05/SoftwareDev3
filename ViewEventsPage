@@ -1,0 +1,29 @@
+
+import javax.swing.*;
+import java.awt.*;
+
+public class ViewEventsPage extends JFrame {
+
+    public ViewEventsPage() {
+        setTitle("Available Events");
+        setSize(400, 350);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        // Sample event data (you can later load from file/database)
+        String[] events = {
+                "Rock Concert - 25/11/2025 - €45",
+                "Football Match - 01/12/2025 - €60",
+                "Opera Night - 05/12/2025 - €80",
+                "Tech Expo - 10/12/2025 - €20"
+        };
+
+        // Events list
+        JList<String> eventList = new JList<>(events);
+        eventList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollPane = new JScrollPane(eventList);
+
+        add(scrollPane, BorderLayout.CENTER);
+        setVisible(true);
+    }
+}
