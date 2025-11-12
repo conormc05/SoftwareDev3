@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 public class Menu extends JFrame implements ActionListener {
 
-    // Declare buttons
+    // Buttons
     private JButton viewEventsButton;
     private JButton searchEventsButton;
     private JButton buyTicketsButton;
@@ -14,7 +14,7 @@ public class Menu extends JFrame implements ActionListener {
 
     public Menu() {
         // --- Window Setup ---
-        setTitle("TicketMaster - Main Menu");
+        setTitle("Ticket Grandmaster - Main Menu");
         setSize(500, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center window
@@ -24,41 +24,46 @@ public class Menu extends JFrame implements ActionListener {
         mainPanel.setBackground(new Color(245, 245, 245));
 
         // --- Logo / Image Section ---
-        // You can replace this with your own logo file
-        ImageIcon logoIcon = new ImageIcon("TicketGrandmaster_logo.png"); 
-        JLabel logoLabel = new JLabel(logoIcon, JLabel.CENTER);
+        JLabel logoLabel = new JLabel("", JLabel.CENTER);
+        ImageIcon logoIcon = new ImageIcon("TicketGrandmaster_logo.png");
+
+        // Check if logo file exists
+        if (logoIcon.getIconWidth() > 0) {
+            logoLabel.setIcon(logoIcon);
+        } else {
+            // Fallback text if image is missing
+            logoLabel.setText("Ticket Grandmaster");
+            logoLabel.setFont(new Font("Arial", Font.BOLD, 30));
+            logoLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        }
+
         mainPanel.add(logoLabel, BorderLayout.NORTH);
 
         // --- Buttons Section ---
-        JPanel buttonPanel = new JPanel(new GridLayout(5, 1, 10, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(5, 1, 12, 12));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 60));
         buttonPanel.setBackground(new Color(245, 245, 245));
 
-        // Create buttons
         viewEventsButton = new JButton("View Events");
         searchEventsButton = new JButton("Search Events");
         buyTicketsButton = new JButton("Buy Tickets");
         viewMyTicketsButton = new JButton("View My Tickets");
         exitButton = new JButton("Exit");
 
-        // Add action listeners
         viewEventsButton.addActionListener(this);
         searchEventsButton.addActionListener(this);
         buyTicketsButton.addActionListener(this);
         viewMyTicketsButton.addActionListener(this);
         exitButton.addActionListener(this);
 
-        // Add buttons to panel
         buttonPanel.add(viewEventsButton);
         buttonPanel.add(searchEventsButton);
         buttonPanel.add(buyTicketsButton);
         buttonPanel.add(viewMyTicketsButton);
         buttonPanel.add(exitButton);
 
-        // Add button panel to main panel
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
 
-        // Add everything to frame
         add(mainPanel);
         setVisible(true);
     }
@@ -68,19 +73,24 @@ public class Menu extends JFrame implements ActionListener {
         Object source = e.getSource();
 
         if (source == viewEventsButton) {
-            JOptionPane.showMessageDialog(this, "Showing available events...");
-        } 
+            new ViewEventsPage(); // Open View Events
+        }
         else if (source == searchEventsButton) {
-            JOptionPane.showMessageDialog(this, "Search for events...");
-        } 
+            new SearchEventsPage(); // Open Search Events
+        }
         else if (source == buyTicketsButton) {
-            JOptionPane.showMessageDialog(this, "Buying tickets...");
-        } 
+            JOptionPane.showMessageDialog(this, "Buying tickets feature coming soon!");
+        }
         else if (source == viewMyTicketsButton) {
-            JOptionPane.showMessageDialog(this, "Viewing your tickets...");
-        } 
+            JOptionPane.showMessageDialog(this, "Your purchased tickets will appear here soon!");
+        }
         else if (source == exitButton) {
-            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit?", "Exit", JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to exit?",
+                    "Exit Ticket Grandmaster",
+                    JOptionPane.YES_NO_OPTION
+            );
             if (confirm == JOptionPane.YES_OPTION) {
                 System.exit(0);
             }
@@ -88,6 +98,6 @@ public class Menu extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Menu());
+        SwingUtilities.invokeLater(Menu::new);
     }
 }
