@@ -77,12 +77,12 @@ public class Menu extends JFrame implements ActionListener {
         if (source == viewEventsButton) {
             new ViewEventsPage(); // Open View Events
         }
-        if (source == buyTicketsButton) {
-            new BuyTickets(); 
+        else if (source == searchEventsButton) {
+            new SearchEventsPage(); // Open Search Events
         }
-        //else if (source == searchEventsButton) {
-            //new SearchEventsPage(); // Open Search Events
-       // }
+        else if (source == buyTicketsButton) {
+            JOptionPane.showMessageDialog(this, "Buying tickets feature coming soon!");
+        }
         else if (source == viewMyTicketsButton) {
             JOptionPane.showMessageDialog(this, "Your purchased tickets will appear here soon!");
         }
