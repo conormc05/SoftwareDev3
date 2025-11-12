@@ -1,0 +1,72 @@
+
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+
+import org.junit.jupiter.api.*;
+import javax.swing.*;
+import java.awt.*;
+
+class LoginPageTest {
+
+    private LoginPage loginPage;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        assumeFalse(GraphicsEnvironment.isHeadless(), "Headless environment: skipping Swing tests");
+        SwingUtilities.invokeAndWait(() -> loginPage = new LoginPage());
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        if (loginPage != null) {
+            SwingUtilities.invokeAndWait(loginPage::dispose);
+        }
+    }
+
+    @Test
+    void windowHasCorrectTitle() {
+        assertEquals("Ticket Grandmaster - Login", loginPage.getTitle());
+    }
+
+    @Test
+    void windowIsVisibleAfterShow() throws Exception {
+        SwingUtilities.invokeAndWait(() -> loginPage.setVisible(true));
+        assertTrue(loginPage.isVisible(), "Login window should be visible");
+    }
+
+    @Test
+    void hasUsernamePasswordAndLoginButton() throws Exception {
+        JTextField username = getPrivateField("username", JTextField.class);
+        JPasswordField password = getPrivateField("password", JPasswordField.class);
+        JButton login = getPrivateField("login", JButton.class);
+        JLabel message = getPrivateField("message", JLabel.class);
+
+        assertNotNull(username, "Username field should exist");
+        assertNotNull(password, "Password field should exist");
+        assertNotNull(login, "Login button should exist");
+        assertNotNull(message, "Message label should exist");
+        assertEquals("Login", login.getText());
+    }
+
+    @Test
+    void clickingLoginWithEmptyFieldsShowsErrorMessage() throws Exception {
+        JTextField username = getPrivateField("username", JTextField.class);
+        JPasswordField password = getPrivateField("password", JPasswordField.class);
+        JButton login = getPrivateField("login", JButton.class);
+        JLabel message = getPrivateField("message", JLabel.class);
+
+        SwingUtilities.invokeAndWait(login::doClick);
+
+        Thread.sleep(100);
+
+        assertEquals("Please enter both username and password.", message.getText());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T getPrivateField(String name, Class<T> type) throws Exception {
+        var f = LoginPage.class.getDeclaredField(name);
+        f.setAccessible(true);
+        return (T) f.get(loginPage);
+    }
+}
