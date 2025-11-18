@@ -1,0 +1,48 @@
+package ticketGM;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class ViewEventsPage extends JFrame {
+
+    public ViewEventsPage() {
+        setTitle("View Events");
+        setSize(450, 350);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        // --- Main layout ---
+        setLayout(new BorderLayout());
+
+        JLabel title = new JLabel("Upcoming Events in Ireland", SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 20));
+        title.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        add(title, BorderLayout.NORTH);
+
+        // --- Events List ---
+        JTextArea eventsArea = new JTextArea();
+        eventsArea.setEditable(false);
+        eventsArea.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        // Example Irish events
+        String[] events = {
+                " Rock Festival - 12/04/2025 - Dublin",
+                " Pop Concert - 20/04/2025 - Cork",
+                " Classical Night - 02/05/2025 - Galway",
+                " Shamrock Rovers vs Bohemians - 15/05/2025 - Tallaght Stadium, Dublin",
+                " Irish Basketball League Finals - 25/05/2025 - Limerick",
+                " Random cool thing  - 30/05/2025 - Belfast",
+                " Galway Summer Fair - 10/06/2025 - Galway",
+                " Gaming Expo Ireland - 18/06/2025 - Dublin Convention Centre"
+        };
+
+        // Append events to the text area
+        for (String event : events) {
+            eventsArea.append(event + "\n\n");
+        }
+
+        add(new JScrollPane(eventsArea), BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+}
