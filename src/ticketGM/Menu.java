@@ -1,0 +1,86 @@
+package ticketGM;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Menu extends JFrame implements ActionListener {
+
+    private JButton viewEventsButton;
+    private JButton searchEventsButton;
+    private JButton buyTicketsButton;
+    private JButton viewMyTicketsButton;
+    private JButton exitButton;
+
+    public Menu() {
+        setTitle("Ticket Grandmaster - Main Menu");
+        setSize(500, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(245, 245, 245));
+
+        JLabel logoLabel = new JLabel("", JLabel.CENTER);
+        ImageIcon logoIcon = new ImageIcon("TicketGrandmaster_logo.png");
+
+        if (logoIcon.getIconWidth() > 0) {
+            logoLabel.setIcon(logoIcon);
+        } else {
+            logoLabel.setText("Ticket Grandmaster");
+            logoLabel.setFont(new Font("Arial", Font.BOLD, 30));
+            logoLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        }
+
+        mainPanel.add(logoLabel, BorderLayout.NORTH);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(5, 1, 12, 12));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 60));
+        buttonPanel.setBackground(new Color(245, 245, 245));
+
+        viewEventsButton = new JButton("View Events");
+        searchEventsButton = new JButton("Search Events");
+        buyTicketsButton = new JButton("Buy Tickets");
+        viewMyTicketsButton = new JButton("Manage Tickets");
+        exitButton = new JButton("Exit");
+
+        viewEventsButton.addActionListener(this);
+        searchEventsButton.addActionListener(this);
+        buyTicketsButton.addActionListener(this);
+        viewMyTicketsButton.addActionListener(this);
+        exitButton.addActionListener(this);
+
+        buttonPanel.add(viewEventsButton);
+        buttonPanel.add(searchEventsButton);
+        buttonPanel.add(buyTicketsButton);
+        buttonPanel.add(viewMyTicketsButton);
+        buttonPanel.add(exitButton);
+
+        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+        add(mainPanel);
+
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        if (source == viewEventsButton) {
+            new ViewEventsPage();
+        } else if (source == searchEventsButton) {
+            new SearchEventsPage();
+        } else if (source == buyTicketsButton) {
+            new BuyTickets();
+        } else if (source == viewMyTicketsButton) {
+            new ManageTicketsPage();
+        } else if (source == exitButton) {
+            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit?", "Exit", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) System.exit(0);
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(Menu::new);
+    }
+}

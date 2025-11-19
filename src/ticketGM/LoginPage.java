@@ -1,0 +1,63 @@
+package ticketGM;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class LoginPage extends JFrame implements ActionListener {
+    private JTextField username;
+    private JPasswordField password;
+    private JButton login;
+    private JLabel message;
+
+    public LoginPage() {
+        setTitle("TicketMaster Login");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(300, 180);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel(new GridLayout(4, 2, 8, 8));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        panel.add(new JLabel("Username:"));
+        username = new JTextField();
+        panel.add(username);
+
+        panel.add(new JLabel("Password:"));
+        password = new JPasswordField();
+        panel.add(password);
+
+        panel.add(new JLabel(""));
+        login = new JButton("Login");
+        login.addActionListener(this);
+        panel.add(login);
+
+        message = new JLabel("", SwingConstants.CENTER);
+        panel.add(message);
+
+        add(panel);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String user = username.getText();
+        String pass = new String(password.getPassword());
+
+        if (user.isEmpty() || pass.isEmpty()) {
+            message.setForeground(Color.RED);
+            message.setText("Please enter both fields");
+        } else {
+            // Optional improvement: show confirmation popup
+            JOptionPane.showMessageDialog(this, "Login Successful!");
+
+            // Close current window
+            this.dispose();
+
+            // Open Menu window (homepage)
+            SwingUtilities.invokeLater(() -> new Menu());
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new LoginPage().setVisible(true));
+    }
+}
