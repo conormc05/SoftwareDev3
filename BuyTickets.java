@@ -1,0 +1,117 @@
+package ticketGM;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class BuyTickets extends JFrame implements ActionListener
+{
+    private JComboBox<String> eventComboBox;
+    private JSpinner quantitySpinner;
+    private JButton buyButton;
+    private JButton backButton;
+
+    public BuyTickets()
+    {
+        setTitle("Ticket GM - Buy Tickets");
+        setSize(500, 400);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(30,50,30,50));
+        mainPanel.setBackground(new Color(250,250,250));
+
+        JLabel titleLabel = new JLabel("Buy Tickets");
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        mainPanel.add(titleLabel);
+
+        // --- Event Selection ---
+        JLabel eventLabel = new JLabel("Select an Event:");
+        eventLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(eventLabel);
+
+        String[] events = {
+        			"Rock Concert - 25/11/2025 - €45",
+        			"Football Match - 01/12/2025 - €60",
+        			"Opera Night - 05/12/2025 - €80",
+        			"Tech Expo - 10/12/2025 - €20"
+        };
+
+        eventComboBox = new JComboBox<>(events);
+        eventComboBox.setMaximumSize(new Dimension(300, 30));
+        eventComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        eventComboBox.setSelectedIndex(0);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        mainPanel.add(eventComboBox);
+
+        // --- Ticket Quantity ---
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        JLabel quantityLabel = new JLabel("Select Quantity:");
+        quantityLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(quantityLabel);
+
+        SpinnerModel spinnerModel = new SpinnerNumberModel(0, 0, 10, 1);
+        quantitySpinner = new JSpinner(spinnerModel);
+        quantitySpinner.setMaximumSize(new Dimension(100, 30));
+        quantitySpinner.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        mainPanel.add(quantitySpinner);
+
+        // --- Buttons ---
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(250, 250, 250));
+
+        buyButton = new JButton("Buy Now");
+        buyButton.addActionListener(this);
+        buttonPanel.add(buyButton);
+
+        backButton = new JButton("Back to Menu");
+        backButton.addActionListener(this);
+        buttonPanel.add(backButton);
+
+        mainPanel.add(buttonPanel);
+
+        add(mainPanel);
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+
+        if (source == buyButton) {
+            String selectedEvent = (String) eventComboBox.getSelectedItem();
+            int quantity = (int) quantitySpinner.getValue();
+
+            if (quantity == 0) {
+                JOptionPane.showMessageDialog(
+                        this, "Invalid Amount", "Error", JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            // 🔥 NEW: Save ticket to file (no Gson)
+            TicketStorage.addTicket(selectedEvent, quantity);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "✅ You have purchased " + quantity + " ticket(s) for:\n" + selectedEvent,
+                    "Purchase Successful",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+        else if (source == backButton) {
+            dispose(); // Close this window and return to main menu
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(BuyTickets::new);
+    }
+}
